@@ -1,1 +1,1 @@
-export const navCategories = [{ name: "Hombres", value: "men" }, { name: "Mujeres", value: "women" }, { name: "Niños", value: "kids" }]
+export const navCategories = [{ name: "Hombres", value: "men" }, { name: "Mujeres", value: "women" }, { name: "Niños", value: "kid" }]

@@ -54,19 +54,19 @@ const CartPage = () => {
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-xl shadow-xl p-7">
+          <div className="bg-white rounded-xl shadow-xl p-7 flex flex-col justify-between content-center h-fit">
 
-            <h2 className="text-2xl mb-2">Resumen de ordenes</h2>
+
 
             <div className="grid grid-cols-2">
-
+              <h2 className="col-span-2 text-2xl mb-2">Resumen de ordenes</h2>
               <span>N° productos</span>
               <span className="text-right">3 artículos</span>
               <span>Subtotal</span>
               <span className="text-right">$100</span>
               <span>Impuestos</span>
-              <span className="text-right">$15</span>
-              <span>Total</span>
+              <span className="text-right mb-5">$15</span>
+              <span className="font-bold text-2xl">Total</span>
               <span className="text-right">$115</span>
 
             </div>

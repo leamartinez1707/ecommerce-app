@@ -45,6 +45,9 @@ const main = async () => {
             data: imagesData
         })
     })
+
+    console.log("Base de datos inicializada correctamente");
+    await prisma.$disconnect();
 }
 
 (() => {

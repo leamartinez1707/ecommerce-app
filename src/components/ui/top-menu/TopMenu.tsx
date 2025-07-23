@@ -20,7 +20,7 @@ export const TopMenu = () => {
 
             <div className='hidden sm:block'>
                 {navCategories.map((category) => (
-                    <Link className='p-2 rounded-md transition-all hover:bg-gray-100 capitalize' href={`/category/${category.value}`} key={category.value}>
+                    <Link className='p-2 rounded-md transition-all hover:bg-gray-100 capitalize' href={`/gender/${category.value}`} key={category.value}>
                         {category.name}
                     </Link>))}
             </div>

@@ -10,7 +10,7 @@ export const SizeSelector = ({ availableSizes, selectedSize }: SizeSelectorProps
     return (
         <div className="my-5">
 
-            <h3 className="font-bold mb-4">Tallas dispomibles</h3>
+            <h3 className="font-bold mb-4">Tallas disponibles</h3>
 
             <div className="flex">
                 {availableSizes.map((size) => (

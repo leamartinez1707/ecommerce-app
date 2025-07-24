@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 // Import Swiper React components
 import { Swiper as SwiperObject } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -37,11 +37,11 @@ export const ProductSlideshow = ({
         }
         spaceBetween={10}
         navigation={true}
-        autoplay={{delay: 2500}}
+        autoplay={{ delay: 2500 }}
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
         className="mySwiper2"
-      > 
+      >
         {images.map((image) => (
           <SwiperSlide key={image}>
             <Image

@@ -1,8 +1,19 @@
-import { Product } from "./interfaces/product.interfaces";
-
+import { Gender, Size, Type } from "./interfaces/product.interfaces";
+export interface SeedProduct {
+    description: string;
+    images: string[];
+    inStock: number;
+    price: number;
+    sizes: Size[];
+    slug: string;
+    tags: string[];
+    title: string;
+    type: Type;
+    gender: Gender;
+}
 interface SeedData {
     categories: string[],
-    products: Product[],
+    products: SeedProduct[],
 }
 
 export const initialData: SeedData = {

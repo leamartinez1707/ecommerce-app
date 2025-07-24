@@ -25,7 +25,6 @@ const main = async () => {
     // Productos
     products.forEach(async (product) => {
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { type, images, ...rest } = product;
         const dbProduct = await prisma.product.create({
             data: {

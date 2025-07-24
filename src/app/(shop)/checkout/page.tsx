@@ -83,7 +83,7 @@ const CheckoutPage = () => {
               <Link href={'/orders/123'}
                 className="flex btn-primary justify-center"
               >
-                Colocar orden</Link>
+                Enviar orden</Link>
             </div>
           </div>
         </div>

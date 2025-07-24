@@ -1,3 +1,5 @@
+export const revalidate = 60;
+
 import { getPaginatedProductsWithImages } from "@/actions";
 import { ProductsGrid, Title } from "@/components";
 import { navCategories } from "@/consts/navbarRoutes";
@@ -6,14 +8,14 @@ import { Pagination } from "@/components";
 
 
 interface CategoryPageProps {
-  params: { gender: string }
-  searchParams?: { page?: string }
+  params: Promise<{ gender: string }>
+  searchParams?: Promise<{ page?: string }>
 }
 
 const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
 
-  const { gender } = params;
-  const page = searchParams?.page;
+  const { gender } = await params;
+  const page = await searchParams?.then(params => params.page);
   const pageNumber = page ? parseInt(page) : 1;
 
 
@@ -22,7 +24,7 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     return notFound()
   }
 
-  const { products, totalPage } = await getPaginatedProductsWithImages({ gender: foundedGender.value, page })
+  const { products, totalPage } = await getPaginatedProductsWithImages({ gender: foundedGender.value, page: pageNumber })
   return (
     <div>
       <Title title={`Todos los productos de ${foundedGender.name}`} subtitle="Productos encontrados" />

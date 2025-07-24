@@ -1,16 +1,17 @@
+export const revalidate = 60; // Revalidate every 60 seconds
+
 import { getPaginatedProductsWithImages } from "@/actions";
 import { Pagination, Title } from "@/components";
 import { ProductsGrid } from "@/components";
 
 interface Props {
-  searchParams?: {
-    page?: string;
-  }
+  searchParams?: Promise<{page?: string}>;
 }
 
 export default async function Home({ searchParams }: Props) {
 
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
+  const params = await searchParams;
+  const page = params?.page ? parseInt(params.page) : 1;
   const { products, totalPage } = await getPaginatedProductsWithImages({ page });
 
   return (

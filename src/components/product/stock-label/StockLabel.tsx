@@ -1,7 +1,6 @@
 'use client';
 
 import { getStockSlug } from '@/actions/products/get-stock-slug';
-import { titleFont } from '@/app/config/fonts';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -24,8 +23,8 @@ export const StockLabel = ({ slug }: Props) => {
 
 
     return (
-        <p className={`${titleFont.className} antialiased font-sans text-lg`}>
-            {isLoading ? 'Cargando stock...' : `Stock: ${stock}`}
+        <p className='antialiased font-sans text-blue-500 text-xl'>
+            {isLoading ? 'Cargando stock...' : `${stock > 0 ? 'En stock' : 'Sin stock'}`}
         </p>
     )
 }

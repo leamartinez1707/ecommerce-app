@@ -4,16 +4,21 @@ import prisma from "../lib/prisma";
 const main = async () => {
 
     // Borrar registros de la base de datos
+    await prisma.user.deleteMany();
     await prisma.productImage.deleteMany()
     await prisma.product.deleteMany()
     await prisma.category.deleteMany()
 
     // Insertar datos iniciales
-    const { categories, products } = initialData;
+    const { categories, products, users } = initialData;
 
     const categoriesData = categories.map((name) => ({ name }))
     await prisma.category.createMany({
         data: categoriesData
+    })
+
+    await prisma.user.createMany({
+        data: users
     })
 
     const categoriesDB = await prisma.category.findMany();
@@ -23,27 +28,26 @@ const main = async () => {
     }, {} as Record<string, string>)
 
     // Productos
-    products.forEach(async (product) => {
-
+    for (const product of products) {
         const { type, images, ...rest } = product;
+        
         const dbProduct = await prisma.product.create({
             data: {
                 ...rest,
                 categoryId: categoriesMap[type]
             }
-        })
-
+        });
 
         // Imágenes
         const imagesData = images.map((image) => ({
             url: image,
             productId: dbProduct.id
-        }))
+        }));
 
         await prisma.productImage.createMany({
             data: imagesData
-        })
-    })
+        });
+    }
 
     console.log("Base de datos inicializada correctamente");
     await prisma.$disconnect();

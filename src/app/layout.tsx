@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { geistSans, geistMono } from "@/app/config/fonts";
+import { Provider } from "@/components";
 
 export const metadata: Metadata = {
   title: { template: "%s - Teslo | Shop", default: "Teslo Shop | eCommerce" },
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased p-4 sm:p-6`}
       >
-        {children}
+        <Provider>
+          {children}
+        </Provider>
       </body>
     </html>
   );

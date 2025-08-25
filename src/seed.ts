@@ -1,4 +1,6 @@
 import { Gender, Size, Type } from "./interfaces/product.interfaces";
+import bcryptjs from 'bcryptjs';
+
 export interface SeedProduct {
     description: string;
     images: string[];
@@ -11,12 +13,36 @@ export interface SeedProduct {
     type: Type;
     gender: Gender;
 }
+
+
+interface SeedUser {
+    name: string;
+    email: string;
+    password: string;
+    role: 'admin' | 'user';
+}
+
 interface SeedData {
     categories: string[],
     products: SeedProduct[],
+    users: SeedUser[]
 }
 
 export const initialData: SeedData = {
+    users: [
+        {
+            name: "John Doe",
+            email: "admin@example.com",
+            password: bcryptjs.hashSync("password123", 10),
+            role: "admin"
+        },
+        {
+            name: "Jane Smith",
+            email: "user@example.com",
+            password: bcryptjs.hashSync("password123", 10),
+            role: "user"
+        }
+    ],
     categories: [
         "Hats", "Hoodies", "Shirts", "Sants"
     ],

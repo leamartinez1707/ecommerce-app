@@ -1,7 +1,11 @@
 'use client'
+import { deleteUserAddress, setUserAddress } from '@/actions';
+import { Address } from '@/interfaces/address.interface';
 import { Country } from '@/interfaces/country.interface';
 import { useAddressStore } from '@/store/address/address-store';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 
@@ -9,7 +13,7 @@ interface FormInputsProps {
     firstName: string;
     lastName: string;
     address: string;
-    addressTwo?: string;
+    address2?: string | undefined;
     postalCode: string;
     city: string;
     country: string;
@@ -18,36 +22,40 @@ interface FormInputsProps {
 }
 interface Props {
     countries: Country[];
+    userStoredAddress?: Partial<Address> | null;
+    address2?: string | undefined;
 }
-const AddressForm = ({ countries }: Props) => {
-
+const AddressForm = ({ countries, userStoredAddress = {}, address2 = undefined }: Props) => {
+    const router = useRouter();
     const setAddress = useAddressStore((state) => state.setAddress)
     const address = useAddressStore((state) => state.address)
 
-    console.log(address)
+    const { data: session } = useSession({
+        required: true
+    });
+
     const { register, handleSubmit, formState: { isValid }, reset } = useForm<FormInputsProps>({
         defaultValues: {
-            firstName: '',
-            lastName: '',
-            address: '',
-            addressTwo: '',
-            postalCode: '',
-            city: '',
-            country: '',
-            phone: '',
-            rememberAddress: false
+            ...userStoredAddress,
+            rememberAddress: true,
+            address2
         }
     });
 
-    const onSubmit = (formData: FormInputsProps) => {
-        if (isValid) {
-            console.log(formData);
-            setAddress(formData)
+    const onSubmit = async (formData: FormInputsProps) => {
+        setAddress(formData)
+        if (formData.rememberAddress) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { rememberAddress, ...rest } = formData
+            await setUserAddress(rest, session!.user.id)
+        } else {
+            await deleteUserAddress(session!.user.id)
+            reset();
         }
+        router.push('/checkout')
     }
 
     useEffect(() => {
-        console.log(address)
         if (address.firstName) {
             reset(address)
         }
@@ -89,7 +97,7 @@ const AddressForm = ({ countries }: Props) => {
                 <input
                     type="text"
                     className="p-2 border rounded-md bg-gray-200"
-                    {...register("addressTwo")}
+                    {...register("address2")}
                 />
             </div>
 
@@ -146,6 +154,7 @@ const AddressForm = ({ countries }: Props) => {
                             type="checkbox"
                             className="border-gray-500 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                             id="rememberAddress"
+                            {...register("rememberAddress")}
                         />
                         <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                             <svg

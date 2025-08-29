@@ -6,7 +6,7 @@ interface State {
         firstName: string;
         lastName: string;
         address: string;
-        addressTwo?: string;
+        address2?: string;
         postalCode: string;
         city: string;
         country: string;
@@ -24,7 +24,7 @@ export const useAddressStore = create<State>()(
                 firstName: '',
                 lastName: '',
                 address: '',
-                addressTwo: '',
+                address2: '',
                 postalCode: '',
                 city: '',
                 country: '',

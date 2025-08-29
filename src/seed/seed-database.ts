@@ -4,6 +4,7 @@ import prisma from "../lib/prisma";
 const main = async () => {
 
     // Borrar registros de la base de datos
+    await prisma.userAddress.deleteMany();
     await prisma.user.deleteMany();
     await prisma.productImage.deleteMany()
     await prisma.product.deleteMany()

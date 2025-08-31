@@ -12,7 +12,8 @@ E-Commerce simulando la tienda de Tesla [Curso Next.js SSR, SSG, CSR, ISR, Middl
 4. Levantar la base de datos con `docker compose up -d`
 5. Ejecturar SEED `npm run seed`
 6. Correr las migraciones de Prisma a la DB con `npx prisma migrate dev`
-7. Correr el proyecto en modo desarrollo con npm run dev
+7. Limpiar el storage de la app.
+8. Correr el proyecto en modo desarrollo con npm run dev
 
 ### Correr el proyecto en produccion
 

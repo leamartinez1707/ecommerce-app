@@ -1,5 +1,6 @@
 "use client";
 
+import { placeOrder } from "@/actions";
 import { useAddressStore } from "@/store/address/address-store";
 import { useCartStore } from "@/store/cart/cart-store";
 import { currencyFormat } from "@/utils";
@@ -31,7 +32,7 @@ const PlaceOrder = () => {
       size: prd.size
     }))
 
-
+    const response = await placeOrder(productsToOrder, address);
     setIsPlacingOrder(false);
   };
 

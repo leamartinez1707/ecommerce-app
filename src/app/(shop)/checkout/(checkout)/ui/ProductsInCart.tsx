@@ -1,9 +1,9 @@
 'use client'
 
+import { useEffect, useState } from "react"
+import Image from "next/image"
 import { useCartStore } from "@/store/cart/cart-store"
 import { currencyFormat } from "@/utils"
-import Image from "next/image"
-import { useEffect, useState } from "react"
 
 const ProductsInCart = () => {
     const [loaded, setLoaded] = useState(false)

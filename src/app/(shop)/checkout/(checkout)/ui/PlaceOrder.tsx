@@ -5,12 +5,14 @@ import { useAddressStore } from "@/store/address/address-store";
 import { useCartStore } from "@/store/cart/cart-store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [error, setError] = useState("");
 
   const address = useAddressStore((state) => state.address);
   const { subTotal, tax, total, itemsInCart } = useCartStore(
@@ -18,12 +20,15 @@ const PlaceOrder = () => {
   );
 
   const cart = useCartStore((state) => state.cart);
+  const cleanCart = useCartStore((state) => state.cleanCart);
+
+  const router = useRouter();
 
   useEffect(() => {
     setLoaded(true);
   }, []);
 
-    const onPlaceOrder = async () => {
+  const onPlaceOrder = async () => {
     setIsPlacingOrder(true);
 
     const productsToOrder = cart.map(prd => ({
@@ -33,10 +38,16 @@ const PlaceOrder = () => {
     }))
 
     const response = await placeOrder(productsToOrder, address);
-    setIsPlacingOrder(false);
+    if (!response.ok) {
+      setIsPlacingOrder(false);
+      setError(response.message);
+      return;
+    }
+    cleanCart();
+    router.replace(`/orders/${response.order!.id}`);
   };
 
-  if (loaded) return <p>Cargando..</p>;
+  if (!loaded) return <p>Cargando..</p>;
   return (
     <div className="bg-white rounded-xl shadow-xl p-7">
       <h2 className="text-2xl mb-2 font-bold">Dirección de entrega</h2>
@@ -76,7 +87,7 @@ const PlaceOrder = () => {
             de la tienda.
           </span>
         </p>
-        {/* <p className="text-red-500">Error de creacion</p> */}
+        <p className="text-red-500">{error}</p>
         <button
           // href={"/orders/123"}
           onClick={onPlaceOrder}
@@ -86,7 +97,7 @@ const PlaceOrder = () => {
             'btn-disabled': isPlacingOrder
           })}
         >
-          Colocar orden
+          Aceptar orden
         </button>
       </div>
     </div>

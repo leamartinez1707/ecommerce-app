@@ -8,11 +8,12 @@ import { currencyFormat } from "@/utils"
 const ProductsInCart = () => {
     const [loaded, setLoaded] = useState(false)
     const productsInCart = useCartStore((state) => state.cart)
-
+    console.log(productsInCart );
     useEffect(() => {
         setLoaded(true)
-    }, [])
+    }, [productsInCart])
     if (!loaded) return 'Cargando carrito...'
+
     if (loaded && productsInCart.length === 0) return <span className="font-semibold">No hay productos en el carrito</span>
     return (
         <>

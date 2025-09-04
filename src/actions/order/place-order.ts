@@ -54,4 +54,94 @@ export const placeOrder = async (
   );
 
   // crear transaccion
+
+  try {
+    const prismaTx = await prisma.$transaction(async (tx) => {
+
+      // Actualizar el stock de los productos
+
+      const updatedProductsPromises = products.map((product) => {
+
+        // Acumular valores
+
+        const productQuantity = productsIds.filter(prd => prd.productId === product.id).reduce((acc, item) => item.quantity + acc, 0);
+
+        if (productQuantity === 0) throw new Error(`${product.id} no tiene cantidad definida`);
+
+
+        return tx.product.update({
+          where: { id: product.id },
+          data: {
+            inStock: { decrement: productQuantity }
+          }
+        })
+      })
+
+      const updatedProducts = await Promise.all(updatedProductsPromises)
+      // Verificar valores negativos en el stock
+
+      updatedProducts.forEach((prd) => {
+        if (prd.inStock < 0) throw new Error(`El producto ${prd.title} se ha quedado sin stock momentáneamente.`)
+      })
+
+      const order = await tx.order.create({
+        data: {
+          userId: userId,
+          itemsInOrder: itemsInOrder,
+          subTotal,
+          tax,
+          total,
+          OrderItem: {
+            createMany: {
+              data: productsIds.map(prd => ({
+                quantity: prd.quantity,
+                size: prd.size,
+                productId: prd.productId,
+                price: products.find(product => product.id === prd.productId)?.price ?? 0 // Esto no deberia ser 0
+              }))
+            }
+          },
+
+        }
+      })
+
+      // Si el price es 0 enviar un error
+      if (productsIds.some(prd => products.find(product => product.id === prd.productId)?.price === 0)) {
+        return {
+          ok: false,
+          message: "Error en la transacción",
+        };
+      }
+
+      // Insertar la direccion de la persona
+
+      const { country, ...restAddress } = address;
+      const orderAddress = await tx.orderAddress.create({
+        data: {
+          ...restAddress,
+          countryId: country,
+          orderId: order.id
+        }
+      });
+
+      return {
+        updatedProducts,
+        order,
+        orderAddress
+      };
+    })
+
+    return {
+      ok: true,
+      order: prismaTx.order,
+      prismaTx
+    }
+
+  } catch (error: any) {
+    return {
+      ok: false,
+      message: error.message
+    }
+
+  }
 };

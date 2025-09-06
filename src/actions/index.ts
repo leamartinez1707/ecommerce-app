@@ -10,3 +10,6 @@ export { getOrdersByUser } from "./order/get-orders-by-user";
 
 export { setUserAddress } from "./address/set-user-address";
 export { deleteUserAddress } from "./address/delete-user-address";
+
+export { setTransactionId } from "./payments/set-transaction-id";
+export { paypalCheckPayment } from "./payments/paypal-check-payment";

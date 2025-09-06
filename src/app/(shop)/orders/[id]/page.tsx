@@ -1,11 +1,7 @@
 import { getOrderById } from "@/actions";
-import { Title } from "@/components";
+import { PaypalButton, Title } from "@/components";
 import { currencyFormat } from "@/utils";
-import clsx from "clsx";
 import Image from "next/image";
-import { IoCardOutline } from "react-icons/io5";
-
-
 
 interface Props {
     params:
@@ -89,14 +85,11 @@ const CheckoutPage = async ({ params }: Props) => {
                             <span className="text-right">{currencyFormat(order.total)}</span>
                         </div>
 
-                        <div className={clsx(
-                            "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5", {
-                            "bg-red-500": !order.isPaid,
-                            "bg-green-600": order.isPaid,
-                        }
-                        )}>
-                            <IoCardOutline size={30} />
-                            <span className="mx-2">{order.isPaid ? 'Pagada' : 'Pendiente de pago'}</span>
+                        <div>
+                            <PaypalButton
+                                orderId={order.id}
+                                amount={order.total}
+                            />
                         </div>
                     </div>
                 </div>

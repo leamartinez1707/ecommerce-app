@@ -12,5 +12,7 @@ export { Footer } from './ui/footer/Footer'
 export { Pagination } from './ui/pagination/Pagination'
 export { StockLabel } from './product/stock-label/StockLabel'
 
+export { PaypalButton } from "./paypal/PaypalButton"
+
 
 export { Provider } from './provider/Provider'

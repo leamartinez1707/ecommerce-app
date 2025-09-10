@@ -1,11 +1,10 @@
 export const revalidate = 0;
 
 import { getOrdersByUser } from '@/actions';
-import { Title } from '@/components';
-import clsx from 'clsx';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { IoCardOutline } from 'react-icons/io5';
+import { Title, OrderStatus } from '@/components';
+
 
 const OrdersPage = async () => {
 
@@ -44,14 +43,7 @@ const OrdersPage = async () => {
                 </td>
                 <td className="flex items-center text-sm  text-gray-900 font-light px-6 py-4 whitespace-nowrap">
 
-                  <div className={clsx({
-                    "flex items-center": true,
-                    "text-red-500": !order.isPaid,
-                    "text-green-600": order.isPaid,
-                  })}>
-                    <IoCardOutline size={30} />
-                    <span className="mx-2">{order.isPaid ? 'Pagada' : 'Pendiente de pago'}</span>
-                  </div>
+                  <OrderStatus isPaid={order.isPaid} />
                 </td>
                 <td className="text-sm text-gray-900 font-light px-6 ">
                   <Link href={`/orders/${order.id}`} className="hover:underline text-blue-800">

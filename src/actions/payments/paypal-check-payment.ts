@@ -1,26 +1,58 @@
 'use server'
 
+import { PaypalOrderStatusResponse } from "@/interfaces/paypal-interface";
+import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
 export const paypalCheckPayment = async (transactionId: string) => {
 
-    try {
-
-        const authToken = await getPaypalBearToken();
-        if (!authToken) {
-            return {
-                ok: false,
-                message: 'No auth token'
-            }
-        }
-        console.log({ authToken })
-        return {
-            ok: true,
-            authToken
-        }
-    } catch (error) {
-        console.log(error)
+    const authToken = await getPaypalBearToken();
+    console.log({ authToken });
+    if (!authToken) {
         return {
             ok: false,
-            message: 'Error checking payment'
+            message: 'No auth token'
+        }
+    }
+    const resp = await verifyPaypalPayment(transactionId, authToken);
+    console.log({ resp });
+    if (!resp) {
+        return {
+            ok: false,
+            message: 'No response from Paypal'
+        }
+    }
+    const { purchase_units, status } = resp;
+
+    const { invoice_id: orderId } = purchase_units[0]
+    if (status !== 'COMPLETED') {
+        return {
+            ok: false,
+            message: 'Payment not completed'
+        }
+    }
+    try {
+        await prisma.order.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                isPaid: true,
+                paidAt: new Date(),
+            }
+        })
+
+        revalidatePath(`/orders/${orderId}`);
+        return {
+            ok: true,
+            message: 'Payment completed'
+        }
+
+    } catch (error) {
+        console.log(error);
+        return {
+            ok: false,
+            message: '500 - Error processing payment'
         }
     }
 
@@ -48,10 +80,40 @@ const getPaypalBearToken = async (): Promise<string | null> => {
 
     try {
 
-        const result = await fetch(url, requestOptions).then(res => res.json());
+        const result = await fetch(url, {
+            ...requestOptions,
+            cache: 'no-store'
+        }).then(res => res.json());
+
+        console.log(result);
         return result.access_token;
     } catch (error) {
         console.error(error);
+        return null;
+    }
+}
+
+const verifyPaypalPayment = async (paypalTransactionId: string, bearerToken: string): Promise<PaypalOrderStatusResponse | null> => {
+
+    const url = `${process.env.PAYPAL_ORDERS_URL}/${paypalTransactionId}`;
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${bearerToken}`);
+
+    const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+    };
+
+    try {
+        const response = await fetch(url, {
+            ...requestOptions,
+            cache: 'no-store'
+        }).then(res => res.json());
+        console.log('Paypal transaction info', response);
+        return response;
+    } catch (error) {
+        console.log(error);
         return null;
     }
 }

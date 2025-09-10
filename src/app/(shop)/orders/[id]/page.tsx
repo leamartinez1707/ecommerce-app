@@ -1,5 +1,6 @@
 import { getOrderById } from "@/actions";
 import { PaypalButton, Title } from "@/components";
+import OrderStatus from "@/components/orders/OrderStatus";
 import { currencyFormat } from "@/utils";
 import Image from "next/image";
 
@@ -20,7 +21,7 @@ const CheckoutPage = async ({ params }: Props) => {
         return <div>Error al obtener la orden, consulte con un administrador.</div>
     }
     const address = order!.OrderAddress;
-
+    console.log(order);
     return (
         <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
 
@@ -30,6 +31,7 @@ const CheckoutPage = async ({ params }: Props) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     {/* Carrito */}
                     <div className="flex flex-col ml-5">
+                        <OrderStatus isPaid={order.isPaid} />
                         <h2 className="text-2xl mb-5 font-bold">Resumen de la orden</h2>
                         {/* Items */}
                         {order.OrderItem.map((product) => (
@@ -85,11 +87,13 @@ const CheckoutPage = async ({ params }: Props) => {
                             <span className="text-right">{currencyFormat(order.total)}</span>
                         </div>
 
-                        <div>
-                            <PaypalButton
+                        <div className="mt-5 mb-2 w-full">
+                            {order.isPaid ? (
+                                <OrderStatus isPaid={order.isPaid} />
+                            ) : <PaypalButton
                                 orderId={order.id}
                                 amount={order.total}
-                            />
+                            />}
                         </div>
                     </div>
                 </div>

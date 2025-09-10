@@ -13,6 +13,7 @@ export { Pagination } from './ui/pagination/Pagination'
 export { StockLabel } from './product/stock-label/StockLabel'
 
 export { PaypalButton } from "./paypal/PaypalButton"
+export { OrderStatus } from './orders/OrderStatus'
 
 
 export { Provider } from './provider/Provider'

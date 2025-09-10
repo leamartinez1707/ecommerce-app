@@ -27,7 +27,7 @@ export const PaypalButton = ({ orderId, amount }: Props) => {
         const transactionId = await actions.order.create({
             purchase_units: [
                 {
-                    // invoice_id: 'order_id'
+                    invoice_id: orderId,
                     amount: {
                         currency_code: 'USD',
                         value: roundedAmount.toString(),

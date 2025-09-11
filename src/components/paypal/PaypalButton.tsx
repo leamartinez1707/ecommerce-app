@@ -37,14 +37,10 @@ export const PaypalButton = ({ orderId, amount }: Props) => {
             intent: 'CAPTURE'
         })
 
-        console.log({ transactionId })
-        // TODO: guardar el ID en la order de la base de datos
-        // Set transaction ID
-        const { ok, message, data: responseData } = await setTransactionId(orderId, transactionId);
+        const { ok, message } = await setTransactionId(orderId, transactionId);
         if (!ok) {
             throw new Error('Error setting transaction ID: ' + message)
         }
-        console.log(responseData)
         return transactionId;
     }
 
@@ -56,10 +52,13 @@ export const PaypalButton = ({ orderId, amount }: Props) => {
         await paypalCheckPayment(details.id!);
     }
     return (
-        <PayPalButtons
-            createOrder={createOrder}
-            onApprove={onApprove}
-        />
+        <div className='relative z-0'>
+            <PayPalButtons
+                createOrder={createOrder}
+                onApprove={onApprove}
+            />
+        </div>
+
     )
 }
 

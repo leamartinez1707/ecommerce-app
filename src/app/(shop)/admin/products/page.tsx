@@ -66,7 +66,7 @@ const ProductsManagementPage = async ({ searchParams }: Props) => {
                   </Link>
                 </td>
                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                  <Link href={`/admin/products/${product.slug}`} className="hover:underline text-blue-800">
+                  <Link href={`/admin/product/${product.slug}`} className="hover:underline text-blue-800">
                     {product.title}
                   </Link>
                 </td>

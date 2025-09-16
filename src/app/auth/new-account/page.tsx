@@ -1,5 +1,4 @@
 import { titleFont } from '@/app/config/fonts';
-import Link from 'next/link';
 import RegisterForm from './ui/RegisterForm';
 
 export default function NewAccountPage() {

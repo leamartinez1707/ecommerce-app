@@ -6,18 +6,18 @@ import { ProductForm } from './ui/ProductForm';
 import { getCategories } from '@/actions';
 
 interface Props {
-    params: { slug: string }
+    params: Promise<{ slug: string }>;
 }
 
 const ProductPage = async ({ params }: Props) => {
 
-    const { slug } = params;
+    const { slug } = await params;
     const [product, categories] = await Promise.all([
         getProductSlug(slug),
         getCategories()
     ]);
 
-    if (!product || !categories) {
+    if (!product && slug !== 'new' || !categories) {
         redirect('/admin/products');
     }
 
@@ -25,7 +25,7 @@ const ProductPage = async ({ params }: Props) => {
     return (
         <>
             <Title title={title} />
-            <ProductForm product={product} categories={categories} />
+            <ProductForm product={product ?? {}} categories={categories} />
         </>
     )
 }

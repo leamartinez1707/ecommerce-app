@@ -2,8 +2,7 @@ export const revalidate = 0;
 
 import { getPaginatedProductsWithImages } from '@/actions';
 import Link from 'next/link';
-import { Title, Pagination } from '@/components';
-import Image from 'next/image';
+import { Title, Pagination, ProductImage } from '@/components';
 import { currencyFormat } from '@/utils';
 
 interface Props {
@@ -21,7 +20,7 @@ const ProductsManagementPage = async ({ searchParams }: Props) => {
       <Title title="Mantenimiento de productos" />
 
       <div className='mb-5'>
-        <Link href="/admin/products/new" className=" btn-primary">
+        <Link href="/admin/product/new" className=" btn-primary">
           Crear producto
         </Link>
       </div>
@@ -56,12 +55,11 @@ const ProductsManagementPage = async ({ searchParams }: Props) => {
               <tr key={product.id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   <Link href={`/product/${product.slug}`}>
-                    <Image
-                      src={`/products/${product.ProductImage[0].url}`}
+                    <ProductImage
                       alt={product.title}
-                      width={100}
-                      height={100}
-                      className='size-[100px] object-cover rounded hover:scale-105 transition-all'
+                      src={product.ProductImage?.[0].url}
+                      width={80}
+                      height={80}
                     />
                   </Link>
                 </td>

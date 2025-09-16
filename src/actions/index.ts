@@ -1,5 +1,6 @@
 export { getPaginatedProductsWithImages } from "./products/product-pagination";
 export { createOrUpdateProduct } from "./products/create-update-product";
+export { deleteProductImage } from "./products/delete-product-image";
 
 export { authenticate } from "./auth/login-action";
 export { logout } from "./auth/logout-action";

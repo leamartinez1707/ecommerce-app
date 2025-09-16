@@ -19,3 +19,9 @@ E-Commerce simulando la tienda de Tesla [Curso Next.js SSR, SSG, CSR, ISR, Middl
 
 1. Ejecutar `npm run build`
 2. Utilizar `npm run start para ver el proyecto en modo produccion`
+
+
+
+
+// PENDIENTE
+Si no hay imagen colocar placeholder

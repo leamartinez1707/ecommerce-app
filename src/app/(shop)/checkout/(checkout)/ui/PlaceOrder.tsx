@@ -40,7 +40,7 @@ const PlaceOrder = () => {
     const response = await placeOrder(productsToOrder, address);
     if (!response.ok) {
       setIsPlacingOrder(false);
-      setError(response.message);
+      setError(response.message as string);
       return;
     }
     cleanCart();

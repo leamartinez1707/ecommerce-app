@@ -137,10 +137,11 @@ export const placeOrder = async (
       prismaTx
     }
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    console.log(error);
     return {
       ok: false,
-      message: error.message
+      message: 'Error en la transacción',
     }
 
   }

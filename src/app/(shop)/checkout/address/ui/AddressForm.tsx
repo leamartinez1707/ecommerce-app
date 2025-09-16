@@ -67,7 +67,7 @@ const AddressForm = ({
     if (address.firstName) {
       reset(address);
     }
-  }, []);
+  }, [address, reset]);
 
   return (
     <form
